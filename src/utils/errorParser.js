@@ -3,7 +3,7 @@ import { ApiError } from './ApiError'
 export function parseApiError(axiosError) {
     if (axiosError.response) {
         // The backend responded with error (4xx, 5xx)
-        const { timestamp, status, error, message, path, errors } = axiosError.response
+        const { timestamp, status, error, message, path, errors } = axiosError.response.data
         return new ApiError(timestamp, status, error, message, path, errors)
     }
     if (axiosError.request) {
