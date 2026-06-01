@@ -3,7 +3,8 @@ import { updateGroup, getGroup, closeGroup } from '../services/groupService'
 
 export function useGroup(groupId){
     const [group, setGroup] = useState(null)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)               // para el fetch inicial
+    const [actionLoading, setActionLoading] = useState(false)   // para update/close
     const [error, setError] = useState(null)
 
     useEffect(() => {
@@ -23,20 +24,21 @@ export function useGroup(groupId){
     }, [groupId])
 
     async function update(data) {
-        setLoading(true)
+        setActionLoading(true)
         setError(null)
         try {
             const updated = await updateGroup(groupId, data)
             setGroup(updated)
+            return updated
         } catch (err) {
             setError(err)
         } finally {
-            setLoading(false)
+            setActionLoading(false)
         }
     }
 
     async function close() {
-        setLoading(true)
+        setActionLoading(true)
         setError(null)
         try {
             const closed = await closeGroup(groupId)
@@ -44,9 +46,9 @@ export function useGroup(groupId){
         } catch (err) {
             setError(err)
         } finally {
-            setLoading(false)
+            setActionLoading(false)
         }
     }
 
-    return {group, loading, error, update, close }
+    return {group, loading, actionLoading, error, update, close }
 }

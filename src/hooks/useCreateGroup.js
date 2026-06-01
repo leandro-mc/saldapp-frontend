@@ -16,7 +16,7 @@ export function useCreateGroup() {
         } catch(err) {
             setError(err)
         } finally {
-            setLoading(true)
+            setLoading(false)
         }
     }
 
