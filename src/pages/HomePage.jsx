@@ -22,10 +22,9 @@ function HomePage() {
         <div>
             <h1>SaldApp</h1>
 
-            <h2>Crear grupo nuevo</h2>
             <GroupForm onSubmit={handleCreate} loading={loading} error={error} />
 
-            <h2>Ingresar a grupo existente</h2>
+            <h3>Ingresar a grupo existente</h3>
             <form onSubmit={handleAccess}>
                 <input value={groupId} onChange={e => setGroupId(e.target.value)} placeholder='Id del Grupo' />
                 <button type='submit'>Ingresar</button>
