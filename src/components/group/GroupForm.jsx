@@ -14,6 +14,7 @@ function GroupForm({ isEditing = false, initialData = {}, onSubmit, loading, err
 
     return (
         <form onSubmit={handleSubmit}>
+            <h3>{isEditing ? 'Editar grupo' : 'Agregar grupo'}</h3>
             <input value={name} onChange={e => setName(e.target.value)} placeholder='Nombre' />
             <input value={description} onChange={e => setDescription(e.target.value)} placeholder='Descripción' />            
             {!isEditing && (
