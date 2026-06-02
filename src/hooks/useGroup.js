@@ -6,6 +6,8 @@ export function useGroup(groupId){
     const [loading, setLoading] = useState(false)               // para el fetch inicial
     const [actionLoading, setActionLoading] = useState(false)   // para update/close
     const [error, setError] = useState(null)
+    const [actionError, setActionError] = useState(null)
+
 
     useEffect(() => {
         async function fetchGroup() { 
@@ -25,13 +27,13 @@ export function useGroup(groupId){
 
     async function update(data) {
         setActionLoading(true)
-        setError(null)
+        setActionError(null)
         try {
             const updated = await updateGroup(groupId, data)
             setGroup(updated)
             return updated
         } catch (err) {
-            setError(err)
+            setActionError(err)
         } finally {
             setActionLoading(false)
         }
@@ -39,16 +41,16 @@ export function useGroup(groupId){
 
     async function close() {
         setActionLoading(true)
-        setError(null)
+        setActionError(null)
         try {
             const closed = await closeGroup(groupId)
             setGroup(closed)
         } catch (err) {
-            setError(err)
+            setActionError(err)
         } finally {
             setActionLoading(false)
         }
     }
 
-    return {group, loading, actionLoading, error, update, close }
+    return {group, loading, actionLoading, error, actionError, update, close }
 }
