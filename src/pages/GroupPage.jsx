@@ -5,10 +5,11 @@ import GroupDetail from '../components/group/GroupDetail'
 import GroupForm from '../components/group/GroupForm'
 import LoadingState from '../components/shared/LoadingState'
 import ErrorMessage from '../components/shared/ErrorMessage'
+import IntegrantsSection from '../components/integrant/IntegrantsSection'
 
 function GroupPage() {
     const { id } = useParams()
-    const { group, loading, actionLoading, error, update, close } = useGroup(id)
+    const { group, loading, actionLoading, error, actionError, update, close } = useGroup(id)
     const [isEditing, setIsEditing] = useState(false)
 
     const isClosed = group?.endDate !== null && group?.endDate !== undefined
@@ -22,7 +23,7 @@ function GroupPage() {
             isEditing={isEditing}
             initialData={group}
             loading={actionLoading}
-            error={error}
+            error={actionError}
             onSubmit={async (data) => {
                 const updated = await update(data)
                 if (updated) setIsEditing(false)
@@ -31,12 +32,15 @@ function GroupPage() {
     )
 
     return (    
-        <GroupDetail
-            group={group}
-            isClosed={isClosed}
-            onEdit={(() => setIsEditing(true))}
-            onClose={close}
-        /> 
+        <>
+            <GroupDetail
+                group={group}
+                isClosed={isClosed}
+                onEdit={(() => setIsEditing(true))}
+                onClose={close}
+            /> 
+            {!isClosed && <IntegrantsSection groupId={id} isClosed={isClosed} />}
+        </>
     )
 }
 
