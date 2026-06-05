@@ -9,7 +9,7 @@ import IntegrantsSection from '../components/integrant/IntegrantsSection'
 
 function GroupPage() {
     const { id } = useParams()
-    const { group, loading, actionLoading, error, actionError, update, close } = useGroup(id)
+    const { group, loading, actionLoading, error, actionError, update, close, refresh } = useGroup(id)
     const [isEditing, setIsEditing] = useState(false)
 
     const isClosed = group?.endDate !== null && group?.endDate !== undefined
@@ -39,7 +39,7 @@ function GroupPage() {
                 onEdit={(() => setIsEditing(true))}
                 onClose={close}
             /> 
-            {!isClosed && <IntegrantsSection groupId={id} isClosed={isClosed} />}
+            {!isClosed && <IntegrantsSection groupId={id} isClosed={isClosed} onMutation={refresh} />}
         </>
     )
 }
