@@ -37,7 +37,7 @@ export function useBalance(groupId) {
         }                  
     }
 
-    async function getIntegrantBalance(integrantId) {
+    async function findIntegrantBalance(integrantId) {
         setLoading(true)
         setError(null)
         try{
@@ -50,7 +50,7 @@ export function useBalance(groupId) {
         }            
     }
 
-    return { integrantsBalances, loading, error, refresh, getIntegrantBalance }
+    return { integrantsBalances, loading, error, refresh, findIntegrantBalance }
 
 }
 
