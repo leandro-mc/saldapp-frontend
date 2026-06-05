@@ -37,12 +37,12 @@ export function useBalance(groupId) {
         }                  
     }
 
-    async function updateIntegrantBalance(integrantId) {
+    async function getIntegrantBalance(integrantId) {
         setLoading(true)
         setError(null)
         try{
             const foundIntegrantBalance = await getIntegrantBalance(groupId, integrantId)
-            setIntegrantsBalances(integrantsBalances => integrantsBalances.map(i => i.integrantId === integrantId ? foundIntegrantBalance : i))
+            return foundIntegrantBalance
         } catch (error) {
             setError(error)
         } finally {
@@ -50,7 +50,7 @@ export function useBalance(groupId) {
         }            
     }
 
-    return { integrantsBalances, loading, error, refresh, updateIntegrantBalance }
+    return { integrantsBalances, loading, error, refresh, getIntegrantBalance }
 
 }
 

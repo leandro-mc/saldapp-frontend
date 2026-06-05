@@ -9,7 +9,7 @@ function IntegrantsSection({
         groupId, isClosed, integrants, integrantLoading, integrantError, 
         addIntegrant, updateIntegrant, removeIntegrant, onMutation 
 }) {
-    const { integrantsBalances, loading, error, refresh, updateIntegrantBalance } = useBalance(groupId)
+    const { integrantsBalances, loading, error, refresh } = useBalance(groupId)
 
     const [editingIntegrant, setEditingIntegrant] = useState(null)
 
@@ -31,7 +31,7 @@ function IntegrantsSection({
                 const updated = await updateIntegrant(editingIntegrant.id, data)
                 if (updated) {
                     setEditingIntegrant(null)
-                    await updateIntegrantBalance(updated.id)
+                    await refresh()
                 }
             }}
         />
