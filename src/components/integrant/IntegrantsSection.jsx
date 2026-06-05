@@ -5,7 +5,7 @@ import IntegrantList from '../integrant/IntegrantList'
 import LoadingState from '../shared/LoadingState'
 import ErrorMessage from '../shared/ErrorMessage'
 
-function IntegrantsSection({ groupId, isClosed }) {
+function IntegrantsSection({ groupId, isClosed, onMutation }) {
     const { integrants, loading, error, actionError, addIntegrant, updateIntegrant, removeIntegrant } = useIntegrant(groupId)
     const [editingIntegrant, setEditingIntegrant] = useState(null)
 
@@ -32,14 +32,18 @@ function IntegrantsSection({ groupId, isClosed }) {
                 loading={loading}
                 error={actionError}
                 onSubmit={async (data) => {
-                    await addIntegrant(data)                    
+                    const added = await addIntegrant(data)
+                    if (added) onMutation?.()                    
                 }}
             />
             }
             <IntegrantList 
                 integrants={integrants}
                 onEdit={(integrant) => setEditingIntegrant(integrant)}
-                onDelete={async (integrantId) => await removeIntegrant(integrantId)}
+                onDelete={async (integrantId) => {
+                    const check = await removeIntegrant(integrantId)
+                    if (check) onMutation?.()
+                }}
                 disabled={isClosed}
             />
         </>
