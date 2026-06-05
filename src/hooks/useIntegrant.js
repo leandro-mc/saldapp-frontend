@@ -32,6 +32,7 @@ export function useIntegrant(groupId) {
         try {
             const created = await createIntegrant(groupId, data)
             setIntegrants(integrants => [...integrants, created])
+            return created
         } catch (error){
             setActionError(error)
         } finally {
@@ -59,13 +60,13 @@ export function useIntegrant(groupId) {
         try {
             await deleteIntegrant(groupId, integrantId)
             setIntegrants(integrants => integrants.filter(i => i.id !== integrantId))
+            return true
         } catch (error){
             setActionError(error)
         } finally {
             setLoading(false)
         }     
     }
-
 
     return { integrants, loading, error, actionError, addIntegrant, updateIntegrant, removeIntegrant }
 }

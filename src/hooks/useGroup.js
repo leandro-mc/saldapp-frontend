@@ -25,6 +25,20 @@ export function useGroup(groupId){
         if (groupId) fetchGroup()
     }, [groupId])
 
+    async function refresh() { 
+        if (!groupId) return
+        setLoading(true)
+        setError(null)
+        try {
+            const data = await getGroup(groupId)
+            setGroup(data)
+        } catch (err) {
+            setError(err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     async function update(data) {
         setActionLoading(true)
         setActionError(null)
@@ -52,5 +66,5 @@ export function useGroup(groupId){
         }
     }
 
-    return {group, loading, actionLoading, error, actionError, update, close }
+    return {group, loading, actionLoading, error, actionError, update, close, refresh }
 }
