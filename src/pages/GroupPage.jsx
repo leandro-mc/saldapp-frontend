@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { useGroup } from '../hooks/useGroup'
+import { useIntegrant } from '../hooks/useIntegrant'
 import GroupDetail from '../components/group/GroupDetail'
 import GroupForm from '../components/group/GroupForm'
 import LoadingState from '../components/shared/LoadingState'
@@ -11,6 +12,11 @@ function GroupPage() {
     const { id } = useParams()
     const { group, loading, actionLoading, error, actionError, update, close, refresh } = useGroup(id)
     const [isEditing, setIsEditing] = useState(false)
+
+    const { integrants, addIntegrant, updateIntegrant, removeIntegrant,
+            loading: integrantsLoading,
+            actionError:integrantActionError 
+        } = useIntegrant(id)    
 
     const isClosed = group?.endDate !== null && group?.endDate !== undefined
 
@@ -39,7 +45,19 @@ function GroupPage() {
                 onEdit={(() => setIsEditing(true))}
                 onClose={close}
             /> 
-            {!isClosed && <IntegrantsSection groupId={id} isClosed={isClosed} onMutation={refresh} />}
+            {!isClosed && 
+                <IntegrantsSection 
+                    groupId={id} 
+                    isClosed={isClosed} 
+                    integrants={integrants}
+                    integrantLoading={integrantsLoading}
+                    integrantError={integrantActionError} 
+                    addIntegrant={addIntegrant}
+                    updateIntegrant={updateIntegrant}
+                    removeIntegrant={removeIntegrant}
+                    onMutation={refresh}
+                />
+            }
         </>
     )
 }

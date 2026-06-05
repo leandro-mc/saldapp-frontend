@@ -1,6 +1,6 @@
-function IntegrantList({ integrants, onEdit, onDelete, disabled }){
+function IntegrantList({ integrantsBalances, onEdit, onDelete, disabled }){
 
-    if (integrants.length === 0) return <p>No hay integrantes en este grupo.</p>
+    if (integrantsBalances.length === 0) return <p>No hay integrantes en este grupo.</p>
 
     return (
         <>
@@ -8,6 +8,7 @@ function IntegrantList({ integrants, onEdit, onDelete, disabled }){
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Nombre</th>
                         <th>Total Gastado</th>
                         <th>Balance</th>
@@ -15,22 +16,24 @@ function IntegrantList({ integrants, onEdit, onDelete, disabled }){
                     </tr>
                 </thead>
                 <tbody>
-                    {integrants.map(integrant => {
+                    {integrantsBalances.map((balance, index) => {
                         // const balanceData = balance.find(b => b.integrantId === integrant.id)
-
                         return (
-                            <tr key={integrant.id}>
-                                <td>{integrant.name}</td>
-                                <td>{null/*balanceData?.totalPaid ?? '-'*/}</td>
-                                <td>{null/*balanceData?.balance ?? '-'*/}</td>
+                            <tr key={balance.integrantId}>
+                                <td>{
+                                    index + 1                                    
+                                }</td>
+                                <td>{balance.integrantName}</td>
+                                <td>{balance?.totalPaid ?? '-'}</td>
+                                <td>{balance?.balance ?? '-'}</td>
                                 <td>
-                                    <button onClick={() => onEdit(integrant)} disabled={disabled}>
+                                    <button onClick={() => onEdit(balance.integrantId)} disabled={disabled}>
                                         Editar
                                     </button>
-                                    <button onClick={() => onDelete(integrant.id)} disabled={disabled}>
+                                    <button onClick={() => onDelete(balance.integrantId)} disabled={disabled}>
                                         Eliminar
                                     </button>
-                                    <button onClick={null/*() => onDetails(integrant.id)*/}>
+                                    <button onClick={null/*() => onDetails(balance.integrantId)*/}>
                                         Detalles
                                     </button>
                                 </td>

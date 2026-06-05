@@ -1,13 +1,22 @@
 import { useState } from 'react'
-import { useIntegrant } from '../../hooks/useIntegrant' 
 import IntegrantForm from '../integrant/IntegrantForm'
 import IntegrantList from '../integrant/IntegrantList'
 import LoadingState from '../shared/LoadingState'
 import ErrorMessage from '../shared/ErrorMessage'
+import { useBalance } from '../../hooks/useBalance'
 
-function IntegrantsSection({ groupId, isClosed, onMutation }) {
-    const { integrants, loading, error, actionError, addIntegrant, updateIntegrant, removeIntegrant } = useIntegrant(groupId)
+function IntegrantsSection({ 
+        groupId, isClosed, integrants, integrantLoading, integrantError, 
+        addIntegrant, updateIntegrant, removeIntegrant, onMutation 
+}) {
+    const { integrantsBalances, loading, error, refresh, updateIntegrantBalance } = useBalance(groupId)
+
     const [editingIntegrant, setEditingIntegrant] = useState(null)
+
+    async function handleMutation() {
+        await refresh()
+        onMutation?.()
+    }
 
     if (loading) return <LoadingState />
     if (error) return <ErrorMessage error={error} />
@@ -16,11 +25,14 @@ function IntegrantsSection({ groupId, isClosed, onMutation }) {
         <IntegrantForm 
             key={editingIntegrant.id}
             initialData={editingIntegrant}
-            loading={loading}
-            error={actionError}
+            loading={integrantLoading}
+            error={integrantError}
             onSubmit={async (data) => {
                 const updated = await updateIntegrant(editingIntegrant.id, data)
-                if (updated) setEditingIntegrant(null)
+                if (updated) {
+                    setEditingIntegrant(null)
+                    await updateIntegrantBalance(updated.id)
+                }
             }}
         />
     )
@@ -29,20 +41,24 @@ function IntegrantsSection({ groupId, isClosed, onMutation }) {
         <>
             {!isClosed &&
             <IntegrantForm
-                loading={loading}
-                error={actionError}
+                loading={integrantLoading}
+                error={integrantError}
                 onSubmit={async (data) => {
                     const added = await addIntegrant(data)
-                    if (added) onMutation?.()                    
+                    if (added) handleMutation()                    
                 }}
             />
             }
             <IntegrantList 
-                integrants={integrants}
-                onEdit={(integrant) => setEditingIntegrant(integrant)}
+                integrantsBalances={integrantsBalances}
+                onEdit={ (integrantId) => {
+                    const integrant = integrants.find(i => i.id === integrantId)
+                    setEditingIntegrant(integrant)
+                    }
+                }
                 onDelete={async (integrantId) => {
                     const check = await removeIntegrant(integrantId)
-                    if (check) onMutation?.()
+                    if (check) handleMutation()
                 }}
                 disabled={isClosed}
             />
