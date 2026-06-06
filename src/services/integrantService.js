@@ -23,7 +23,7 @@ export async function updateIntegrant(groupId, integrantId, data) {
 
 /**
  * @param {number} groupId 
- * @returns {Promise<IntegrantResponse>}
+ * @returns {Promise<IntegrantResponse[]>}
  */
 export async function getIntegrantsByGroup(groupId) {
     const response = await httpClient.get(`/groups/${groupId}/integrants`)    

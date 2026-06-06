@@ -2,7 +2,7 @@ import httpClient from '../config/httpClient';
 
 /**
  * @param {number} groupId
- * @return {Promise<BalanceResponse>}
+ * @return {Promise<BalanceResponse[]>}
  */
 export async function getBalancesByGroup(groupId) {
     const response = await httpClient.get(`/groups/${groupId}/balances`)
