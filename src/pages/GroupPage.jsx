@@ -7,6 +7,7 @@ import GroupForm from '../components/group/GroupForm'
 import LoadingState from '../components/shared/LoadingState'
 import ErrorMessage from '../components/shared/ErrorMessage'
 import IntegrantsSection from '../components/integrant/IntegrantsSection'
+import ExpensesSection from '../components/expense/ExpensesSection'
 
 function GroupPage() {
     const { id } = useParams()
@@ -17,6 +18,7 @@ function GroupPage() {
             loading: integrantsLoading,
             actionError:integrantActionError 
         } = useIntegrant(id)    
+    const [selectedIntegrant, setSelectedIntegrant] = useState(null)
 
     const isClosed = group?.endDate !== null && group?.endDate !== undefined
 
@@ -48,6 +50,7 @@ function GroupPage() {
             {!isClosed && 
                 <IntegrantsSection 
                     groupId={id} 
+                    groupCurrency={group.currency}
                     isClosed={isClosed} 
                     integrants={integrants}
                     integrantLoading={integrantsLoading}
@@ -55,6 +58,19 @@ function GroupPage() {
                     addIntegrant={addIntegrant}
                     updateIntegrant={updateIntegrant}
                     removeIntegrant={removeIntegrant}
+                    onDetails={(integrantId) => {
+                        const integrant = integrants.find(i => i.id === integrantId)
+                        setSelectedIntegrant(integrant)
+                    }}
+                    onMutation={refresh}
+                />
+            }
+            {!isClosed && 
+                <ExpensesSection 
+                    groupId={id}
+                    groupCurrency={group.currency}
+                    integrants={integrants}
+                    selectedIntegrant={selectedIntegrant}
                     onMutation={refresh}
                 />
             }

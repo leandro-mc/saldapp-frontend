@@ -6,8 +6,8 @@ import ErrorMessage from '../shared/ErrorMessage'
 import { useBalance } from '../../hooks/useBalance'
 
 function IntegrantsSection({ 
-        groupId, isClosed, integrants, integrantLoading, integrantError, 
-        addIntegrant, updateIntegrant, removeIntegrant, onMutation 
+        groupId, groupCurrency, isClosed, integrants, integrantLoading, integrantError, 
+        addIntegrant, updateIntegrant, removeIntegrant, onDetails, onMutation 
 }) {
     const { integrantsBalances, loading, error, refresh } = useBalance(groupId)
 
@@ -50,6 +50,7 @@ function IntegrantsSection({
             />
             }
             <IntegrantList 
+                groupCurrency={groupCurrency}
                 integrantsBalances={integrantsBalances}
                 onEdit={ (integrantId) => {
                     const integrant = integrants.find(i => i.id === integrantId)
@@ -60,6 +61,7 @@ function IntegrantsSection({
                     const check = await removeIntegrant(integrantId)
                     if (check) handleMutation()
                 }}
+                onDetails={onDetails}
                 disabled={isClosed}
             />
         </>

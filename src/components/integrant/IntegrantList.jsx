@@ -1,7 +1,7 @@
 import { useState } from "react"
 import ConfirmDialog from "../shared/ConfirmDialog"
 
-function IntegrantList({ integrantsBalances, onEdit, onDelete, disabled }){
+function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, onDetails, disabled }){
 
     const [dialog, setDialog] = useState({ isOpen: false, integrantId: null })
 
@@ -28,22 +28,21 @@ function IntegrantList({ integrantsBalances, onEdit, onDelete, disabled }){
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
-                        <th>Total Gastado</th>
+                        <th>Total Gastado {groupCurrency}</th>
                         <th>Balance</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {integrantsBalances.map((balance, index) => {
-                        // const balanceData = balance.find(b => b.integrantId === integrant.id)
                         return (
                             <tr key={balance.integrantId}>
                                 <td>{
                                     index + 1                                    
                                 }</td>
                                 <td>{balance.integrantName}</td>
-                                <td>{balance?.totalPaid ?? '-'}</td>
-                                <td>{balance?.balance ?? '-'}</td>
+                                <td>{groupCurrency}{balance?.totalPaid ?? '-'}</td>
+                                <td>{balance?.balance ?? '-'} ({groupCurrency})</td>
                                 <td>
                                     <button onClick={() => onEdit(balance.integrantId)} disabled={disabled}>
                                         Editar
@@ -51,7 +50,7 @@ function IntegrantList({ integrantsBalances, onEdit, onDelete, disabled }){
                                     <button onClick={() => handleDeleteClick(balance.integrantId)} disabled={disabled}>
                                         Eliminar
                                     </button>
-                                    <button onClick={null/*() => onDetails(balance.integrantId)*/}>
+                                    <button onClick={() => onDetails(balance.integrantId)}>
                                         Detalles
                                     </button>
                                 </td>
