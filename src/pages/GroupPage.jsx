@@ -21,21 +21,20 @@ function GroupPage() {
         } = useIntegrant(id)    
     const [selectedIntegrant, setSelectedIntegrant] = useState(null)
 
-    const isClosed = group?.endDate !== null && group?.endDate !== undefined
-
     const [showSettlement, setShowSettlement] = useState(false)
     const [settlementTrigger, setSettlementTrigger] = useState(0)
 
+    if (loading) return <LoadingState />
+    if (error) return <ErrorMessage error={error} />
+    if (!group) return null
+
+    const isClosed = group?.endDate !== null && group?.endDate !== undefined
     const isSettlementVisible = isClosed || showSettlement
 
     async function handleMutation() {
         await refresh()
         if (showSettlement) setSettlementTrigger(prev => prev + 1)
     }
-
-    if (loading) return <LoadingState />
-    if (error) return <ErrorMessage error={error} />
-    if (!group) return null
 
     if (isEditing) return (
         <GroupForm 
