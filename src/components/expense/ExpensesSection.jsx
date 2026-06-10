@@ -4,12 +4,13 @@ import LoadingState from "../shared/LoadingState"
 import ExpenseForm from "./ExpenseForm"
 import ExpenseList from "./ExpenseList"
 
-function ExpensesSection({groupId, groupCurrency, integrants, selectedIntegrant, onMutation}){
+function ExpensesSection({groupId, isClosed, groupCurrency, integrants, selectedIntegrant, onMutation}){
     const { integrantExpenses, loading, error, loadByIntegrant, addExpense, updateExpense, removeExpense } = useExpense(groupId)
     const [ editingExpense, setEditingExpense ] = useState(null)
 
     useEffect(() => {
         if (selectedIntegrant) loadByIntegrant(selectedIntegrant.id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedIntegrant])   
 
     async function handleMutation() {
@@ -18,7 +19,7 @@ function ExpensesSection({groupId, groupCurrency, integrants, selectedIntegrant,
 
     if (loading) return <LoadingState />
 
-    if (editingExpense) return (
+    if (editingExpense && !isClosed) return (
         <ExpenseForm 
             key={editingExpense.id}
             initialData={editingExpense}
@@ -39,6 +40,7 @@ function ExpensesSection({groupId, groupCurrency, integrants, selectedIntegrant,
         <>
         {selectedIntegrant &&
             <ExpenseList 
+                disabled={isClosed}
                 groupCurrency={groupCurrency}
                 expenses={integrantExpenses}
                 integrant={selectedIntegrant}
@@ -51,23 +53,19 @@ function ExpensesSection({groupId, groupCurrency, integrants, selectedIntegrant,
                     handleMutation()
                 }}
             />
-        }{!selectedIntegrant &&
-            <p>Seleccioná un integrante para ver sus gastos.</p>
         }
-        <ExpenseForm 
-            integrants={integrants}
-            loading={loading}
-            error={error}
-            onSubmit={async (data) => {
-                const created = await addExpense(data)
-                if (created) handleMutation()                
-            }}
-        />
-        <div>
-            <br />
-            <br />
-            <br />
-        </div>
+
+        {!isClosed && 
+            <ExpenseForm 
+                integrants={integrants}
+                loading={loading}
+                error={error}
+                onSubmit={async (data) => {
+                    const created = await addExpense(data)
+                    if (created) handleMutation()                
+                }}
+            />
+        }
         
         </>
     )
