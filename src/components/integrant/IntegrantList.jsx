@@ -23,9 +23,12 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
     <div className="py-8 text-center">
         <p className="text-sm text-gray-400">No hay integrantes en este grupo.</p>
         <p className="text-xs text-gray-400 mt-1">Agregá el primero usando el formulario.</p>
-    </div>
-    
+    </div>    
     )
+
+    const balance = integrantsBalances.reduce((acc, b) => acc + b.balance, 0)
+    const total = integrantsBalances.reduce((acc, b) => acc + b.totalPaid, 0)
+
 
     return (
         <>
@@ -37,7 +40,7 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
                             <th className="py-2 px-3 font-medium">#</th>
                             <th className="py-2 px-3 font-medium">Nombre</th>
                             <th className="py-2 px-3 font-medium">Gastado</th>
-                            <th className="py-2 px-3 font-medium">Balance</th>
+                            <th className="py-2 px-3 font-medium">Balance({groupCurrency})</th>
                             <th className="py-2 px-3 font-medium text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -59,7 +62,7 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
                                         ? 'text-red-700'
                                         : 'text-gray-600'
                                     }`}>
-                                        {balance.balance > 0 ? '+' : ''}{formatMoney(balance.balance)} ({groupCurrency})
+                                        {balance.balance > 0 ? '+' : ''}{formatMoney(balance.balance)}
                                     </td>
                                     
                                     <td className="py-2 px-3 text-center space-x-2">
@@ -90,6 +93,16 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
                             )
                         })}
                     </tbody>
+                    {/* table footer with the total */}
+                    <tfoot className="border-t border-gray-200 bg-gray-50">
+                        <tr>
+                            <td className="py-2 px-3"></td>
+                            <td className="py-2 px-3 font-semibold text-gray-700">Total</td>
+                            <td className="py-2 px-3 font-bold text-blue-600">{formatMoney(total, groupCurrency)}</td>                            
+                            <td className="py-2 px-3 font-bold text-blue-600">{formatMoney(balance, groupCurrency)}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <ConfirmDialog 
