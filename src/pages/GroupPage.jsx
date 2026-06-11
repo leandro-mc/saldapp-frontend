@@ -37,20 +37,23 @@ function GroupPage() {
     }
 
     if (isEditing) return (
-        <GroupForm 
-            isEditing={isEditing}
-            initialData={group}
-            loading={actionLoading}
-            error={actionError}
-            onSubmit={async (data) => {
-                const updated = await update(data)
-                if (updated) setIsEditing(false)
-            }}
-        />
+        <div className="max-w-2xl mx-auto px-4 py-6 md:px-8 space-y-6">
+            <GroupForm 
+                isEditing={isEditing}
+                initialData={group}
+                loading={actionLoading}
+                error={actionError}
+                onSubmit={async (data) => {
+                    const updated = await update(data)
+                    if (updated) setIsEditing(false)
+                }}
+            />
+        </div>
     )
 
     return (    
-        <>
+        <div className="max-w-7xl mx-auto px-4 py-6 md:px-8 space-y-6">
+
             <GroupDetail
                 group={group}
                 isClosed={isClosed}
@@ -58,31 +61,34 @@ function GroupPage() {
                 onClose={close}
             /> 
             
-            <IntegrantsSection 
-                groupId={id} 
-                groupCurrency={group.currency}
-                isClosed={isClosed} 
-                integrants={integrants}
-                integrantLoading={integrantsLoading}
-                integrantError={integrantActionError} 
-                addIntegrant={addIntegrant}
-                updateIntegrant={updateIntegrant}
-                removeIntegrant={removeIntegrant}
-                onDetails={(integrantId) => {
-                    const integrant = integrants.find(i => i.id === integrantId)
-                    setSelectedIntegrant(integrant)
-                }}
-                onMutation={handleMutation}
-            />            
-            
-            <ExpensesSection 
-                groupId={id}
-                isClosed={isClosed}
-                groupCurrency={group.currency}
-                integrants={integrants}
-                selectedIntegrant={selectedIntegrant}
-                onMutation={handleMutation}
-            />
+            {/* The three blocks of the central panel */}
+            <div className="flex flex-col xl:flex-row gap-6 items-start">
+                <IntegrantsSection 
+                    groupId={id} 
+                    groupCurrency={group.currency}
+                    isClosed={isClosed} 
+                    integrants={integrants}
+                    integrantLoading={integrantsLoading}
+                    integrantError={integrantActionError} 
+                    addIntegrant={addIntegrant}
+                    updateIntegrant={updateIntegrant}
+                    removeIntegrant={removeIntegrant}
+                    onDetails={(integrantId) => {
+                        const integrant = integrants.find(i => i.id === integrantId)
+                        setSelectedIntegrant(integrant)
+                    }}
+                    onMutation={handleMutation}
+                />            
+                
+                <ExpensesSection 
+                    groupId={id}
+                    isClosed={isClosed}
+                    groupCurrency={group.currency}
+                    integrants={integrants}
+                    selectedIntegrant={selectedIntegrant}
+                    onMutation={handleMutation}
+                />
+            </div>
             
             <SettlementSection 
                 groupId={id}
@@ -92,7 +98,7 @@ function GroupPage() {
                 onToggle={() => setShowSettlement(prev => !prev)}
                 refreshTrigger={settlementTrigger}
             />
-        </>
+        </div>
     )
 }
 
