@@ -1,5 +1,6 @@
 import { useState } from "react"
 import ConfirmDialog from "../shared/ConfirmDialog"
+import { formatMoney } from "../../utils/moneyUtils"
 
 function ExpenseList({ groupCurrency, expenses, integrant, onEdit, onDelete, disabled }){
     const [dialog, setDialog] = useState({ isOpen: false, expenseId: null })
@@ -23,46 +24,60 @@ function ExpenseList({ groupCurrency, expenses, integrant, onEdit, onDelete, dis
 
     return (
         <>
-            <h3>Gastos de {integrant.name}</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Descripcion</th>
-                        <th>Monto {groupCurrency}</th>                       
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {expenses.map((expense, index) => {
-                        return (
-                            <tr key={expense.id}>
-                                <td>{
-                                    index + 1                                    
-                                }</td>
-                                <td>{expense.description}</td>
-                                <td>{groupCurrency}{expense.amount}</td>
-                                <td>
-                                    <button onClick={() => onEdit(expense.id)} disabled={disabled}>
-                                        Editar
-                                    </button>
-                                    <button onClick={() => handleDeleteClick(expense.id)} disabled={disabled}>
-                                        Eliminar
-                                    </button>                                    
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td></td>
-                        <td>Total</td>
-                        <td>{groupCurrency}{total}</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
+            <h3 className="text-base font-bold text-blue-700 mb-3 border-b pb-2">
+                Gastos de {integrant.name}
+            </h3>
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-sm text-left">
+                    <thead className="bg-gray-50 text-gray-600">
+                        <tr>
+                            <th className="py-2 px-3 font-medium">#</th>
+                            <th className="py-2 px-3 font-medium">Descripcion</th>
+                            <th className="py-2 px-3 font-medium">Monto {groupCurrency}</th>                       
+                            <th className="py-2 px-3 font-medium text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {expenses.map((expense, index) => {
+                            return (
+                                <tr key={expense.id} className="hover:bg-gray-50 transition-colors">
+                                    <td className="py-2 px-3 text-gray-500">{index + 1}</td>
+                                    <td className="py-2 px-3 text-gray-700">{expense.description}</td>
+                                    <td className="py-2 px-3 font-medium text-gray-800">{formatMoney(expense.amount, groupCurrency)}</td>
+                                    
+                                    <td className="py-2 px-3 text-center space-x-2">
+                                        <button 
+                                            onClick={() => onEdit(expense.id)} 
+                                            disabled={disabled}
+                                            className="text-blue-700 hover:text-blue-900 text-xs font-medium 
+                                                        disabled:opacity-40 disabled:cursor-not-allowed"
+                                        >
+                                            Editar
+                                        </button>
+                                        <button 
+                                            onClick={() => handleDeleteClick(expense.id)}
+                                            disabled={disabled}
+                                            className="text-red-700 hover:text-red-900 text-xs font-medium 
+                                                        disabled:opacity-40 disabled:cursor-not-allowed"
+                                        >
+                                            Eliminar
+                                        </button>                                    
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                    {/* table footer with the total */}
+                    <tfoot className="border-t border-gray-200 bg-gray-50">
+                        <tr>
+                            <td className="py-2 px-3"></td>
+                            <td className="py-2 px-3 font-semibold text-gray-700">Total</td>
+                            <td className="py-2 px-3 font-bold text-blue-600">{formatMoney(total, groupCurrency)}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
             <ConfirmDialog 
                 isOpen={dialog.isOpen}

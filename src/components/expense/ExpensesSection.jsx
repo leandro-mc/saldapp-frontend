@@ -17,55 +17,73 @@ function ExpensesSection({groupId, isClosed, groupCurrency, integrants, selected
         onMutation?.()
     } 
 
-    if (loading) return <LoadingState />
+    if (loading) return (
+        <div className="flex-1 w-full bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+            <LoadingState />
+        </div>
+        )
 
     if (editingExpense && !isClosed) return (
-        <ExpenseForm 
-            key={editingExpense.id}
-            initialData={editingExpense}
-            integrants={integrants}
-            loading={loading}
-            error={error}
-            onSubmit={async (data) => {
-                const updated = await updateExpense(editingExpense.id, data)
-                if (updated) {
-                    setEditingExpense(null)
-                    handleMutation()
-                }
-            }}
-        />
-    )
-
-    return (
-        <>
-        {selectedIntegrant &&
-            <ExpenseList 
-                disabled={isClosed}
-                groupCurrency={groupCurrency}
-                expenses={integrantExpenses}
-                integrant={selectedIntegrant}
-                onEdit={(expenseId) => {
-                    const expense = integrantExpenses.find(e => e.id === expenseId)
-                    setEditingExpense(expense)
-                }}
-                onDelete={async (expenseId) => {
-                    await removeExpense(expenseId)
-                    handleMutation()
-                }}
-            />
-        }
-
-        {!isClosed && 
+        <div className="flex-1 w-full bg-white p-5 rounded-lg shadow-sm border border-gray-200">
             <ExpenseForm 
+                key={editingExpense.id}
+                initialData={editingExpense}
                 integrants={integrants}
                 loading={loading}
                 error={error}
                 onSubmit={async (data) => {
-                    const created = await addExpense(data)
-                    if (created) handleMutation()                
+                    const updated = await updateExpense(editingExpense.id, data)
+                    if (updated) {
+                        setEditingExpense(null)
+                        handleMutation()
+                    }
                 }}
             />
-        }
+        </div>
+    )
+
+    if (!selectedIntegrant && isClosed) return null
+
+    return (
+        <>        
+        {selectedIntegrant && (
+        <div className="flex-1 w-full space-y-4">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                <ExpenseList 
+                    disabled={isClosed}
+                    groupCurrency={groupCurrency}
+                    expenses={integrantExpenses}
+                    integrant={selectedIntegrant}
+                    onEdit={(expenseId) => {
+                        const expense = integrantExpenses.find(e => e.id === expenseId)
+                        setEditingExpense(expense)
+                    }}
+                    onDelete={async (expenseId) => {
+                        await removeExpense(expenseId)
+                        handleMutation()
+                    }}
+                />
+            </div>
+        </div>
+        )}
+        
+
+        
+        {!isClosed && ( 
+            <div className="flex-1 w-full space-y-4">
+                <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                    <ExpenseForm 
+                        integrants={integrants}
+                        loading={loading}
+                        error={error}
+                        onSubmit={async (data) => {
+                            const created = await addExpense(data)
+                            if (created) handleMutation()                
+                        }}
+                    />
+                </div>
+            </div>
+        )}        
         
         </>
     )
