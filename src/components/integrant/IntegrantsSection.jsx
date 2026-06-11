@@ -32,7 +32,7 @@ function IntegrantsSection({
                     const updated = await updateIntegrant(editingIntegrant.id, data)
                     if (updated) {
                         setEditingIntegrant(null)
-                        await refresh()
+                        handleMutation()
                     }
                 }}
             />
