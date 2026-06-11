@@ -19,7 +19,13 @@ function ExpenseList({ groupCurrency, expenses, integrant, onEdit, onDelete, dis
         setDialog({ isOpen: false, integrantId: null })
     }
 
-    if (expenses.length === 0) return <p>{integrant.name} no posee gastos a su nombre.</p>
+    if (expenses.length === 0) return (
+        <div className="py-6 text-center">
+            <p className="text-sm text-gray-400">
+                {integrant.name} no tiene gastos registrados.
+            </p>
+        </div>
+    )
 
     const total = expenses.reduce((acc, e) => acc + e.amount, 0)
 
