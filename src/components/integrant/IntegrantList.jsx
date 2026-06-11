@@ -18,48 +18,79 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
         setDialog({ isOpen: false, integrantId: null })
     }
 
-    if (integrantsBalances.length === 0) return <p>No hay integrantes en este grupo.</p>
+    if (integrantsBalances.length === 0) return (
+    <div className="py-8 text-center">
+        <p className="text-sm text-gray-400">No hay integrantes en este grupo.</p>
+        <p className="text-xs text-gray-400 mt-1">Agregá el primero usando el formulario.</p>
+    </div>
+    
+    )
 
     return (
         <>
-            <h3>Integrantes</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Total Gastado {groupCurrency}</th>
-                        <th>Balance</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {integrantsBalances.map((balance, index) => {
-                        return (
-                            <tr key={balance.integrantId}>
-                                <td>{
-                                    index + 1                                    
-                                }</td>
-                                <td>{balance.integrantName}</td>
-                                <td>{groupCurrency}{balance?.totalPaid ?? '-'}</td>
-                                <td>{balance?.balance ?? '-'} ({groupCurrency})</td>
-                                <td>
-                                    <button onClick={() => onEdit(balance.integrantId)} disabled={disabled}>
-                                        Editar
-                                    </button>
-                                    <button onClick={() => handleDeleteClick(balance.integrantId)} disabled={disabled}>
-                                        Eliminar
-                                    </button>
-                                    <button onClick={() => onDetails(balance.integrantId)}>
-                                        Detalles
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-
+            <h3 className="text-base font-bold text-gray-800 mb-3">Integrantes</h3>
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-sm text-left">
+                    <thead className="bg-gray-50 text-gray-600">
+                        <tr>
+                            <th className="py-2 px-3 font-medium">#</th>
+                            <th className="py-2 px-3 font-medium">Nombre</th>
+                            <th className="py-2 px-3 font-medium">Gastado</th>
+                            <th className="py-2 px-3 font-medium">Balance</th>
+                            <th className="py-2 px-3 font-medium text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {integrantsBalances.map((balance, index) => {
+                            return (
+                                <tr 
+                                    key={balance.integrantId}
+                                    className="hover:bg-gray-50 transition-colors"
+                                >
+                                    <td className="py-2 px-3 text-gray-500">{index + 1}</td>
+                                    <td className="py-2 px-3 font-medium text-gray-800">{balance.integrantName}</td>
+                                    <td className="py-2 px-3 text-gray-700">{groupCurrency}{balance?.totalPaid ?? '-'}</td>
+                                    
+                                    <td className={`py-2 px-3 font-medium ${
+                                        balance.balance > 0
+                                        ? 'text-green-700'
+                                        : balance.balance < 0
+                                        ? 'text-red-700'
+                                        : 'text-gray-600'
+                                    }`}>
+                                        {balance.balance > 0 ? '+' : ''}{balance?.balance ?? '-'} ({groupCurrency})
+                                    </td>
+                                    
+                                    <td className="py-2 px-3 text-center space-x-2">
+                                        <button 
+                                            onClick={() => onEdit(balance.integrantId)} 
+                                            disabled={disabled}
+                                            className="text-blue-600 hover:text-blue-800 text-xs font-medium disabled:opacity-40
+                                                        disabled:cursor-not-allowed"
+                                        >
+                                            Editar
+                                        </button>
+                                        <button 
+                                            onClick={() => handleDeleteClick(balance.integrantId)} 
+                                            disabled={disabled}
+                                            className="text-red-700 hover:text-red-900 text-xs font-medium disabled:opacity-40
+                                                        disabled:cursor-not-allowed"
+                                        >
+                                            Eliminar
+                                        </button>
+                                        <button 
+                                            onClick={() => onDetails(balance.integrantId)}
+                                            className="text-gray-500 hover:text-gray-700 text-xs font-medium"
+                                        >
+                                            Detalles
+                                        </button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
             <ConfirmDialog 
                 isOpen={dialog.isOpen}
                 message={"¿Estas seguro de que deseas eliminar al integrante?"}

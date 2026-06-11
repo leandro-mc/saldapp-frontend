@@ -22,33 +22,37 @@ function IntegrantsSection({
     if (error) return <ErrorMessage error={error} />
     
     if (editingIntegrant) return (
-        <IntegrantForm 
-            key={editingIntegrant.id}
-            initialData={editingIntegrant}
-            loading={integrantLoading}
-            error={integrantError}
-            onSubmit={async (data) => {
-                const updated = await updateIntegrant(editingIntegrant.id, data)
-                if (updated) {
-                    setEditingIntegrant(null)
-                    await refresh()
-                }
-            }}
-        />
-    )
-
-    return (
-        <>
-            {!isClosed &&
-            <IntegrantForm
+        <div className="flex-1 w-full bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+            <IntegrantForm 
+                key={editingIntegrant.id}
+                initialData={editingIntegrant}
                 loading={integrantLoading}
                 error={integrantError}
                 onSubmit={async (data) => {
-                    const added = await addIntegrant(data)
-                    if (added) handleMutation()                    
+                    const updated = await updateIntegrant(editingIntegrant.id, data)
+                    if (updated) {
+                        setEditingIntegrant(null)
+                        await refresh()
+                    }
                 }}
             />
-            }
+        </div>
+    )
+
+    return (
+        <div className="flex-1 w-full bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+            {!isClosed &&(
+                <div className="mb-6 pb-4 border-b border-gray-100">
+                    <IntegrantForm
+                        loading={integrantLoading}
+                        error={integrantError}
+                        onSubmit={async (data) => {
+                            const added = await addIntegrant(data)
+                            if (added) handleMutation()                    
+                        }}
+                    />
+                </div>
+            )}
             <IntegrantList 
                 groupCurrency={groupCurrency}
                 integrantsBalances={integrantsBalances}
@@ -64,7 +68,7 @@ function IntegrantsSection({
                 onDetails={onDetails}
                 disabled={isClosed}
             />
-        </>
+        </div>
     )
 }
 
