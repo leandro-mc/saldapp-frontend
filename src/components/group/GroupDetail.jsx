@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { formatDate } from '../../utils/dateUtils'
 import ConfirmDialog from '../shared/ConfirmDialog'
+import { formatMoney } from '../../utils/moneyUtils'
 
 function GroupDetail({ group, onEdit, onClose, isClosed }) {
 
@@ -19,7 +20,7 @@ function GroupDetail({ group, onEdit, onClose, isClosed }) {
         setDialog({ isOpen: false })
     }
 
-    const amountPerPerson = group.integrantCount > 0 ? (group.totalExpenses / group.integrantCount).toFixed(2) : 0
+    const amountPerPerson = group.integrantCount > 0 ? (group.totalExpenses / group.integrantCount) : 0
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
@@ -85,11 +86,11 @@ function GroupDetail({ group, onEdit, onClose, isClosed }) {
                 </div>
                 <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">Total de gastos</p>
-                    <p className="font-bold text-blue-600 text-lg">{group.currency}{group.totalExpenses}</p>
+                    <p className="font-bold text-blue-600 text-lg">{formatMoney(group.totalExpenses, group.currency)}</p>
                 </div>
                 <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">Correspondiente p/p</p>
-                    <p className="font-bold text-blue-600 text-lg">{group.currency}{amountPerPerson}</p>
+                    <p className="font-bold text-blue-600 text-lg">{formatMoney(amountPerPerson, group.currency)}</p>
                 </div>
             </div>
 

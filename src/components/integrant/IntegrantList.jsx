@@ -1,5 +1,6 @@
 import { useState } from "react"
 import ConfirmDialog from "../shared/ConfirmDialog"
+import { formatMoney } from "../../utils/moneyUtils"
 
 function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, onDetails, disabled }){
 
@@ -49,7 +50,7 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
                                 >
                                     <td className="py-2 px-3 text-gray-500">{index + 1}</td>
                                     <td className="py-2 px-3 font-medium text-gray-800">{balance.integrantName}</td>
-                                    <td className="py-2 px-3 text-gray-700">{groupCurrency}{balance?.totalPaid ?? '-'}</td>
+                                    <td className="py-2 px-3 text-gray-700">{formatMoney(balance.totalPaid, groupCurrency)}</td>
                                     
                                     <td className={`py-2 px-3 font-medium ${
                                         balance.balance > 0
@@ -58,7 +59,7 @@ function IntegrantList({ groupCurrency, integrantsBalances, onEdit, onDelete, on
                                         ? 'text-red-700'
                                         : 'text-gray-600'
                                     }`}>
-                                        {balance.balance > 0 ? '+' : ''}{balance?.balance ?? '-'} ({groupCurrency})
+                                        {balance.balance > 0 ? '+' : ''}{formatMoney(balance.balance)} ({groupCurrency})
                                     </td>
                                     
                                     <td className="py-2 px-3 text-center space-x-2">
