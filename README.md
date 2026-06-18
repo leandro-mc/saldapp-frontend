@@ -1,123 +1,157 @@
 # SaldApp — Frontend
 
-División inteligente de gastos grupales.
+Smart splitting of group expenses.
+
+README also available in:
+
+- [Spanish](README.es.md)
+
+---
+
+## Preview
+
+### Home
+<p>
+  <img src="docs/screenshots/home.png" width="800" alt="Main screen">
+</p>
+
+### Open Group
+<p>
+  <img src="docs/screenshots/open-group.png" width="800" alt="Open group">
+</p>
+
+### Closed Group
+<p>
+  <img src="docs/screenshots/closed-group.png" width="800" alt="Closed group">
+</p>
 
 ---
 
 ## Stack
 
-| Elemento                | Elección                      |
-| ----------------------- | ----------------------------- |
-| Lenguaje                | JavaScript ES6+               |
-| Framework UI            | React 18                      |
-| Build Tool / Dev Server | Vite                          |
-| Enrutamiento            | React Router DOM v6           |
-| Cliente HTTP            | Axios                         |
-| Arquitectura            | Layered Frontend Architecture |
+| Element                | Choice                        |
+| ---------------------- | ----------------------------- |
+| Language              | JavaScript ES6+               |
+| UI Framework          | React 19                      |
+| Build Tool / Dev Server | Vite                        |
+| Routing               | React Router DOM v7           |
+| HTTP Client           | Axios                         |
+| Styling               | Tailwind CSS v4               |
+| Architecture          | Layered Frontend Architecture |
 
 ---
 
-## Requisitos previos
+## Prerequisites
 
 - Node.js 22+
 - npm 11+
-- Backend de SaldApp corriendo en `http://localhost:8080` (referirse al repositorio del backend para instrucciones)
+- SaldApp backend running at `http://localhost:8080` (refer to the backend repository for instructions)
 
 ---
 
-## Levantar el proyecto
+## Run the project
 
-**1. Clonar el repositorio**.
+**1. Clone the repository**.
 
 ```bash
 git clone https://github.com/leandro-mc/saldapp-frontend.git
 cd saldapp-frontend
 ```
 
-**2. Crear el archivo `.env`** a partir del ejemplo:
+**2. Create the `.env` file** from the example:
 
 ```bash
 cp .env.example .env
 ```
 
-**3. Instalar dependencias**.
+**3. Install dependencies**.
 
 ```bash
 npm install
 ```
 
-**4. Correr la aplicación**.
+**4. Run the application**.
 
 ```bash
 npm run dev
 ```
 
-La aplicación queda disponible en `http://localhost:5173`.
+The application will be available at `http://localhost:5173`.
 
 ---
 
-## Estructura del proyecto
+## Architecture
+
+The project follows a layered architecture inspired by Clean Architecture, adapted to a React frontend. The dependency rule is the same: **outer layers depend on inner layers, never the other way around.**
+
+```
+Types  ←  Services  ←  Hooks  ←  Components / Pages
+```
+
+---
+
+## Project structure
 
 ``` readme
 src/
 │
 ├── config/
-│   └── httpClient.js        # Instancia única de Axios con baseURL e interceptors
+│   └── httpClient.js        # Single Axios instance with baseURL and interceptors
 │
 ├── utils/
 │
-├── types/                   # Contratos de datos (JSDoc). Sin lógica, solo forma
+├── types/                   # Data contracts (JSDoc). No logic, only shape
 │
-├── services/                # Funciones que hablan con la API. Sin estado, sin React
+├── services/                # Functions that talk to the API. No state, no React
 │
-├── hooks/                   # Lógica, estado y orquestación. Un hook por responsabilidad
+├── hooks/                   # Logic, state, and orchestration. One hook per responsibility
 │
-├── components/              # Piezas de UI. Reciben datos por props, no llaman servicios
+├── components/              # UI pieces. Receive data through props, do not call services
 │   ├── shared/
 │   ├── group/
 │   ├── integrant/
 │   ├── expense/
-│   ├── balance/
 │   └── settlement/
 │
-├── pages/                   # Una por pantalla. Compone hooks y components
-│   ├── HomePage.jsx          # Crear grupo o ingresar a uno existente por ID
-│   └── GroupPage.jsx         # Gestión completa del grupo activo
+├── pages/                   # One per screen. Composes hooks and components
+│   ├── HomePage.jsx         # Create a group or join an existing one by ID
+│   └── GroupPage.jsx        # Full management of the active group
 │
-├── App.jsx                  # Router principal con rutas / y /groups/:id
-└── main.jsx                 # Punto de entrada, monta React en el DOM
+├── App.jsx                  # Main router with / and /groups/:id routes
+├── main.jsx                 # Entry point, mounts React and global styles
+└── index.css                # @import "tailwindcss"
 ```
 
 ---
 
-## Variables de entorno
+## Environment variables
 
-Crear un `.env` en la raíz del proyecto basado en `.env.example`:
+Create a `.env` file in the project root based on `.env.example`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8080
 ```
 
-> Las variables deben tener el prefijo `VITE_` para ser accesibles en el código.
+> Variables must use the `VITE_` prefix to be accessible in the code.
 
 ---
 
-## Rutas
+## Routes
 
-| Ruta          | Página      | Descripción                                                            |
-| ------------- | ----------- | ---------------------------------------------------------------------- |
-| `/`           | `HomePage`  | Crear un grupo nuevo o acceder a uno existente por ID                  |
-| `/groups/:id` | `GroupPage` | Gestión completa del grupo: integrantes, gastos, balance y liquidación |
+| Route         | Page        | Description                                                        |
+| ------------- | ----------- | ------------------------------------------------------------------ |
+| `/`           | `HomePage`   | Create a new group or access an existing one by ID                |
+| `/groups/:id` | `GroupPage`  | Full group management: members, expenses, balance, and settlement |
 
 ---
 
-## Autor
+## Author
 
 **Leandro Mora Corrales**  
 [linkedin.com/in/leandromora](https://linkedin.com/in/leandromora)
 
 ---
 
-## Licencia
+## License
 
 MIT License — see [LICENSE](LICENSE) for details.
