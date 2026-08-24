@@ -7,7 +7,6 @@ import GroupForm from '../components/group/GroupForm'
 import LoadingState from '../components/shared/LoadingState'
 import ErrorMessage from '../components/shared/ErrorMessage'
 import IntegrantsSection from '../components/integrant/IntegrantsSection'
-import ExpensesSection from '../components/expense/ExpensesSection'
 import SettlementSection from '../components/settlement/SettlementSection'
 
 function GroupPage() {
@@ -19,7 +18,6 @@ function GroupPage() {
             loading: integrantsLoading,
             actionError:integrantActionError 
         } = useIntegrant(id)    
-    const [selectedIntegrant, setSelectedIntegrant] = useState(null)
 
     const [showSettlement, setShowSettlement] = useState(false)
     const [settlementTrigger, setSettlementTrigger] = useState(0)
@@ -47,6 +45,7 @@ function GroupPage() {
                     const updated = await update(data)
                     if (updated) setIsEditing(false)
                 }}
+                onCancel={() => setIsEditing(false)}
             />
         </div>
     )
@@ -61,8 +60,8 @@ function GroupPage() {
                 onClose={close}
             /> 
             
-            {/* The three blocks of the central panel */}
-            <div className="flex flex-col xl:flex-row gap-6 items-start">
+            {/* Central panel: show only the integrantes table. Expenses and details open in modals. */}
+            <div className="flex flex-col gap-6 items-start">
                 <IntegrantsSection 
                     groupId={id} 
                     groupCurrency={group.currency}
@@ -73,21 +72,8 @@ function GroupPage() {
                     addIntegrant={addIntegrant}
                     updateIntegrant={updateIntegrant}
                     removeIntegrant={removeIntegrant}
-                    onDetails={(integrantId) => {
-                        const integrant = integrants.find(i => i.id === integrantId)
-                        setSelectedIntegrant(integrant)
-                    }}
                     onMutation={handleMutation}
                 />            
-                
-                <ExpensesSection 
-                    groupId={id}
-                    isClosed={isClosed}
-                    groupCurrency={group.currency}
-                    integrants={integrants}
-                    selectedIntegrant={selectedIntegrant}
-                    onMutation={handleMutation}
-                />
             </div>
             
             <SettlementSection 

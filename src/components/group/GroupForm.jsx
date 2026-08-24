@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ErrorMessage from '../shared/ErrorMessage'
 import SelectList from '../shared/SelectList'
 
-function GroupForm({ isEditing = false, initialData = {}, onSubmit, loading, error }) {
+function GroupForm({ isEditing = false, initialData = {}, onSubmit, onCancel, loading, error }) {
     const [name, setName] = useState(initialData.name || '')
     const [description, setDescription] = useState(initialData.description || '')
     const [startDate, setStartDate] = useState(initialData.startDate || '')
@@ -71,14 +71,26 @@ function GroupForm({ isEditing = false, initialData = {}, onSubmit, loading, err
                 </div>
             )}          
         
-            <button 
-                type='submit' 
-                disabled={loading}
-                className=" w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors
-                            font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                {loading ? 'Guardando...' : 'Guardar'}
-            </button>
+            <div className="flex gap-2">
+                <button 
+                    type='submit' 
+                    disabled={loading}
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors
+                                font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'Guardando...' : 'Guardar'}
+                </button>
+
+                {onCancel && (
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="flex-none bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 text-sm font-medium"
+                    >
+                        Volver
+                    </button>
+                )}
+            </div>
 
             <ErrorMessage error={error} />
         </form>
