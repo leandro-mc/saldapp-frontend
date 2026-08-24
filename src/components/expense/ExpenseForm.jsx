@@ -3,7 +3,7 @@ import SelectList from '../shared/SelectList'
 import ErrorMessage from '../shared/ErrorMessage'
 
 
-function ExpenseForm({ initialData = {}, integrants, onSubmit, loading, error }){
+function ExpenseForm({ initialData = {}, integrants, onSubmit, onCancel, loading, error }){
     const [payedBy, setPayedBy] = useState(initialData.payedBy || '')
     const [description, setDescription] = useState(initialData.description || '')
     const [amount, setAmount] = useState(initialData.amount || '')
@@ -70,14 +70,26 @@ function ExpenseForm({ initialData = {}, integrants, onSubmit, loading, error })
                 </div>
             )}
 
-            <button 
-                type="submit" 
-                disabled={loading}
-                className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 transition-colors
-                            text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed mt-1"
-            >
-                {loading ? 'Guardando...' : 'Guardar'}
-            </button>
+            <div className="flex gap-2">
+                <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="flex-1 bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 transition-colors
+                                text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+                >
+                    {loading ? 'Guardando...' : 'Guardar'}
+                </button>
+
+                {onCancel && (
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="flex-none bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 text-sm font-medium mt-1"
+                    >
+                        Cancelar
+                    </button>
+                )}
+            </div>
 
             <ErrorMessage error={error} />
         </form>

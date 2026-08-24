@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ErrorMessage from '../shared/ErrorMessage'
 
-function IntegrantForm({ initialData = {}, onSubmit, loading, error }) {
+function IntegrantForm({ initialData = {}, onSubmit, onCancel, loading, error }) {
     const [name, setName] = useState(initialData.name || '')
 
     function handleSubmit(e){
@@ -33,6 +33,16 @@ function IntegrantForm({ initialData = {}, onSubmit, loading, error }) {
                 >
                     {loading ? 'Guardando...' : 'Guardar'}
                 </button>
+
+                {onCancel && (
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 text-sm font-medium"
+                    >
+                        Cancelar
+                    </button>
+                )}
             </div>            
 
             
