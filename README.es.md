@@ -1,157 +1,56 @@
 # SaldApp — Frontend
 
-División inteligente de gastos grupales.
+> Read in English: [README.md](README.md)
 
-README también disponible en:
-
-- [Inglés](README.md)
-
----
+Aplicación web para dividir gastos grupales. Creas un grupo, agregas integrantes y gastos, y ves de un vistazo quién le debe a quién. Backend complementario: [saldapp-backend](https://github.com/leandro-mc/saldapp-backend).
 
 ## Vista previa
 
-### Inicio
 <p>
   <img src="docs/screenshots/home.png" width="800" alt="Pantalla principal">
 </p>
-
-### Grupo Abierto
 <p>
   <img src="docs/screenshots/open-group.png" width="800" alt="Grupo abierto">
 </p>
-
-### Grupo Cerrado
 <p>
   <img src="docs/screenshots/closed-group.png" width="800" alt="Grupo cerrado">
 </p>
 
----
+## Funciones
 
-## Stack
+- Crear y gestionar grupos, integrantes y gastos
+- Balance en vivo por integrante y plan de liquidación con el mínimo de pagos
+- Los grupos cerrados pasan a una vista de solo lectura
+- Estados de carga, error y confirmación manejados de forma consistente
 
-| Elemento                | Elección                      |
-| ----------------------- | ----------------------------- |
-| Lenguaje                | JavaScript ES6+               |
-| Framework UI            | React 19                      |
-| Build Tool / Dev Server | Vite                          |
-| Enrutamiento            | React Router DOM v7           |
-| Cliente HTTP            | Axios                         |
-| Estilos                 | Tailwind CSS v4               |
-| Arquitectura            | Layered Frontend Architecture |
+## Tecnologías
 
----
+- React 19 y Vite
+- React Router 7
+- Axios con un interceptor global que normaliza los errores de la API
+- Tailwind CSS 4
+- ESLint
 
-## Requisitos previos
+## Cómo ejecutarlo
 
-- Node.js 22+
-- npm 11+
-- Backend de SaldApp corriendo en `http://localhost:8080` (referirse al repositorio del backend para instrucciones)
-
----
-
-## Levantar el proyecto
-
-**1. Clonar el repositorio**.
+Requisitos: Node.js 22+ y el [backend](https://github.com/leandro-mc/saldapp-backend) corriendo en `http://localhost:8080`.
 
 ```bash
 git clone https://github.com/leandro-mc/saldapp-frontend.git
 cd saldapp-frontend
-```
-
-**2. Crear el archivo `.env`** a partir del ejemplo:
-
-```bash
-cp .env.example .env
-```
-
-**3. Instalar dependencias**.
-
-```bash
+cp .env.example .env     # VITE_API_BASE_URL apunta al backend
 npm install
+npm run dev              # http://localhost:5173
 ```
 
-**4. Correr la aplicación**.
-
-```bash
-npm run dev
-```
-
-La aplicación queda disponible en `http://localhost:5173`.
-
----
-
-## Arquitectura
-
-El proyecto sigue una arquitectura por capas inspirada en Clean Architecture, adaptada a un frontend de React. La regla de dependencia es la misma: **las capas externas dependen de las internas, nunca al revés.**
+## Estructura
 
 ```
-Types  ←  Services  ←  Hooks  ←  Components / Pages
-```
-
----
-
-## Estructura del proyecto
-
-``` readme
 src/
-│
-├── config/
-│   └── httpClient.js        # Instancia única de Axios con baseURL e interceptors
-│
-├── utils/
-│
-├── types/                   # Contratos de datos (JSDoc). Sin lógica, solo forma
-│
-├── services/                # Funciones que hablan con la API. Sin estado, sin React
-│
-├── hooks/                   # Lógica, estado y orquestación. Un hook por responsabilidad
-│
-├── components/              # Piezas de UI. Reciben datos por props, no llaman servicios
-│   ├── shared/
-│   ├── group/
-│   ├── integrant/
-│   ├── expense/
-│   └── settlement/
-│
-├── pages/                   # Una por pantalla. Compone hooks y components
-│   ├── HomePage.jsx         # Crear grupo o ingresar a uno existente por ID
-│   └── GroupPage.jsx        # Gestión completa del grupo activo
-│
-├── App.jsx                  # Router principal con rutas / y /groups/:id
-├── main.jsx                 # Punto de entrada, monta React y estilos globales
-└── index.css                # @import "tailwindcss"
+├── pages/        # HomePage, GroupPage
+├── components/   # UI por dominio: group, expense, integrant, settlement, shared
+├── hooks/        # Lógica de datos y estado (useGroup, useExpense, ...)
+├── services/     # Llamadas a la API por recurso
+├── config/       # Cliente Axios
+└── utils/        # Dinero, fechas, parseo de errores
 ```
-
----
-
-## Variables de entorno
-
-Crear un `.env` en la raíz del proyecto basado en `.env.example`:
-
-```env
-VITE_API_BASE_URL=http://localhost:8080
-```
-
-> Las variables deben tener el prefijo `VITE_` para ser accesibles en el código.
-
----
-
-## Rutas
-
-| Ruta          | Página      | Descripción                                                            |
-| ------------- | ----------- | ---------------------------------------------------------------------- |
-| `/`           | `HomePage`  | Crear un grupo nuevo o acceder a uno existente por ID                  |
-| `/groups/:id` | `GroupPage` | Gestión completa del grupo: integrantes, gastos, balance y liquidación |
-
----
-
-## Autor
-
-**Leandro Mora Corrales**  
-[linkedin.com/in/leandromora](https://linkedin.com/in/leandromora)
-
----
-
-## Licencia
-
-MIT License — see [LICENSE](LICENSE) for details.
